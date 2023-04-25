@@ -1,7 +1,7 @@
 import Reach, {FC} from 'react';
 
 import { ListProps } from './ListInterface';
-import ListGroup from 'react-bootstrap/ListGroup'
+import ListGroup from 'react-bootstrap/ListGroup';
   //name={this.state.name} message={this.state.message}
 const List : FC<ListProps> = ({data}) => {
     return (

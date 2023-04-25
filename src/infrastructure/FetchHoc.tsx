@@ -6,13 +6,15 @@ interface Post {
   email: string;
   body: string;
 }
+
 export interface FetchProps {
-  fetchProps: FetchSub
-}
-export interface FetchSub {
   isLoading: boolean;
   data: Post[];
   error: any;
+}
+
+class FetchImp implements FetchProps {
+  constructor(public isLoading: boolean, public data: Post[], public error : any) {}
 }
 
 interface FetchHOCProps {
@@ -58,10 +60,13 @@ const fetchHOC = ({
       fetchData();
     }, [url, options, includeParams]);
 
+    let result = new FetchImp(isLoading, data, error)
     return (
       <WrappedComponent
         {...(props as any)}
-        fetchProps={{ isLoading, data, error }}
+        isLoading={result.isLoading}
+        data={result.data}
+        error={result.error}
       />
     );
   };

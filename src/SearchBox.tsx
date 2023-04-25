@@ -1,13 +1,13 @@
 import React, { FC, useState, useEffect } from "react";
 import fetchHOC, {FetchProps} from './infrastructure/FetchHoc';
+import ListGroup from 'react-bootstrap/ListGroup';
 
 const API_URL = `https://jsonplaceholder.typicode.com/posts/1/comments`;
 interface Props {
     // define props needed for your component
   }
-const SearchBoxComponent: FC<FetchProps> = (fetchObj) => {
+const SearchBoxComponent: FC<FetchProps> = ({isLoading, data, error}) => {
     
-    const { isLoading, data, error } = fetchObj.fetchProps;
     if (isLoading) {
       return <div>Loading...</div>;
     }
@@ -19,7 +19,18 @@ const SearchBoxComponent: FC<FetchProps> = (fetchObj) => {
     {
         return <div>No Data!</div>;
     }
-    return <div>Here is your data: {JSON.stringify(data)}</div>;
+    return <ListGroup>
+    {
+        !data.length ? (<ListGroup.Item>No items</ListGroup.Item>) :
+        (data.map((item) => 
+        <ListGroup.Item as="li">
+            <div>
+                <div className="fw-bold">{item.name}</div>
+                {item.email}
+            </div>
+             </ListGroup.Item>) )
+    }
+    </ListGroup>
   };
   
   const SearchBox = fetchHOC({

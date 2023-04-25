@@ -10,7 +10,7 @@ class App extends Component<any> {
   render() {
     return (
       <div className="App">
-        <h1>learn react</h1>
+        <h1>Posts</h1>
         <SearchBox/>
       </div>
     );
