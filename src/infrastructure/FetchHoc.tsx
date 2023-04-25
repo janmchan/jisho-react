@@ -64,9 +64,7 @@ const fetchHOC = ({
     return (
       <WrappedComponent
         {...(props as any)}
-        isLoading={result.isLoading}
-        data={result.data}
-        error={result.error}
+        {...(result)}
       />
     );
   };
