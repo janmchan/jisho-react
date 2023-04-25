@@ -1,68 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, { FC, useState, useEffect } from "react";
+import fetchHOC, {FetchProps} from './infrastructure/FetchHoc';
 
-interface Post {
-    id: number;
-    name: string;
-    email: string;
-    body: string;
-}
-
-
-function SearchBox() {
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState<Post[]>([]);
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    async function fetchData() {
-
-        try
-        {
-            setLoading(true);
-            setResults([]);
-
-            const API_URL = `https://jsonplaceholder.typicode.com/posts/${query}/comments`;
-            const response = await fetch(API_URL);
-            setLoading(false);
-            if(!response.ok)
-            {
-                setError("An error occurred while fetching the search results.");    
-                setResults([]);
-            }
-            else
-            {
-                const data = await response.json();
-                setResults(data);
-                setError("");
-            }
-
-        }catch (error) {
-            
-            setError("An error occurred while fetching the search results.");
-        }
-     
-    }
-    fetchData();
-  }, [query]);
-
-  function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    console.log("doing stuff");
-    setQuery(event.target.value);
+const API_URL = `https://jsonplaceholder.typicode.com/posts/1/comments`;
+interface Props {
+    // define props needed for your component
   }
-
-  return (
-    <div>
-        {loading && <h1>Loading...</h1>}
-        {error && <p>{error}</p>}
-      <input type="text" value={query} onChange={handleInputChange} />
-      {results.map(post => 
-        <div key={post?.name}>
-        <h3>{post?.email}</h3>
-        <p>{post?.body}</p>
-      </div>)}
-      
-    </div>
-  );
-}
-
+const SearchBoxComponent: FC<FetchProps> = (fetchObj) => {
+    
+    const { isLoading, data, error } = fetchObj.fetchProps;
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
+  
+    if (error) {
+      return <div>Error: {error.message}</div>;
+    }
+    if(!data)
+    {
+        return <div>No Data!</div>;
+    }
+    return <div>Here is your data: {JSON.stringify(data)}</div>;
+  };
+  
+  const SearchBox = fetchHOC({
+    url: API_URL,
+    options: {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      //body: JSON.stringify({}),
+    },
+    includeParams: false,
+    WrappedComponent: SearchBoxComponent,
+  });
+  
 export default SearchBox;
