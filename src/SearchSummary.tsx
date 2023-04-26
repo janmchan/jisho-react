@@ -1,15 +1,13 @@
-import React, { FC, useState, useEffect } from "react";
+import { FC } from "react";
 import fetchHOC, {FetchProps, Post} from './infrastructure/FetchHoc';
 import ListGroup from 'react-bootstrap/ListGroup';
 
 
 interface SearchSummaryProps {
-    // define props needed for your component
     keyword:string;
 }
 
 const SearchSummaryComponent: FC<SearchSummaryProps & FetchProps> = ({keyword, isLoading, data, error}) => {
-    //console.log(`ssprops: ${JSON.stringify(ssProps)}`)
     if (isLoading) {
       return <div>Loading...</div>;
     }
@@ -36,7 +34,7 @@ const SearchSummaryComponent: FC<SearchSummaryProps & FetchProps> = ({keyword, i
   };
 
   //TODO: replace the post number based on the keyword
-  let API_URL = `https://jsonplaceholder.typicode.com/posts/1/comments`;
+  let API_URL = `https://jsonplaceholder.typicode.com/posts/{postid}/comments`;
   const SearchSummary = fetchHOC({
     url: API_URL,
     options: {

@@ -1,36 +1,39 @@
-import React, { FC, useState, useEffect } from "react";
-import fetchHOC, {FetchProps} from './infrastructure/FetchHoc';
-import ListGroup from 'react-bootstrap/ListGroup';
+import React, { FC, useState } from "react";
 import SearchSummary from "./SearchSummary";
-
-
-interface Props {
-    // define props needed for your component
-    keyword:string;
-}
+type FormValues = {
+  keyword: string;
+};
 
 const SearchBox: FC = () => {
-  const [text, setText] = useState<string>('');
-  const [displayText, setDisplayText] = useState<string>('');
+  const [formValues, setFormValues] = useState<FormValues>({ keyword: "" });
+  const [searchWord, setSearchWord] = useState<string>("0");
 
-  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setText(event.target.value);
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSearchWord(formValues.keyword);
   };
-
-  const handleButtonClick = () => {
-    setDisplayText(text);
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFormValues({ ...formValues, keyword: event.target.value });
   };
 
   return (
-    <div>
-      <label htmlFor="postId">Post Search</label>
-      <input id="postId" type="text" value={text} onChange={handleTextChange} />
-      <button onClick={handleButtonClick}>Submit</button>
-      <SearchSummary keyword={displayText} />
-    </div>
-  );
-  
-  };
+    <>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="keyword">Keyword:</label>
+        <input
+          id="keyword"
+          type="text"
+          value={formValues.keyword}
+          onChange={handleNameChange}
+        />
+        <button type="submit">Submit</button>
 
-  
+      </form>
+      <SearchSummary keyword={searchWord} />
+    </>
+
+  );
+
+};
+
 export default SearchBox;

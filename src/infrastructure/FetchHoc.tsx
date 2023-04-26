@@ -14,7 +14,7 @@ export interface FetchProps {
 }
 
 class FetchImp implements FetchProps {
-  constructor(public isLoading: boolean, public data: Post[], public error : any) {}
+  constructor(public isLoading: boolean, public data: Post[], public error: any) { }
 }
 
 interface FetchHOCProps {
@@ -25,7 +25,7 @@ interface FetchHOCProps {
 }
 interface SearchSummaryProps {
   // define props needed for your component
-  keyword:string;
+  keyword: string;
 }
 
 const fetchHOC = ({
@@ -40,16 +40,17 @@ const fetchHOC = ({
     const [error, setError] = useState<any>(null);
 
     useEffect(() => {
-      console.log(`props HOC ${JSON.stringify(props)}`)
-      const fetchUrl = includeParams ? `${url}?${new URLSearchParams(options as any).toString()}` : url;
-      
+
+      var replaceUrl = url.replace("{postid}", props.keyword);
+      const fetchUrl = includeParams ? `${replaceUrl}?${new URLSearchParams(options as any).toString()}` : replaceUrl;
+
       const fetchData = async () => {
         try {
-      
+
           setIsLoading(true);
           const response = await fetch(fetchUrl, options);
           const result = await response.json();
-          console.log(`result ${result}`);
+
           setData(result);
         } catch (err) {
           setError(err);
@@ -58,7 +59,7 @@ const fetchHOC = ({
         }
       };
       fetchData();
-    }, [url, options, includeParams]);
+    }, [url, options, includeParams, props.keyword]);
 
     let result = new FetchImp(isLoading, data, error)
     return (

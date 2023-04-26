@@ -4,7 +4,6 @@ import SearchBox from './SearchBox';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component<any> {
-  //List data={SampleData.data}
   render() {
     return (
       <div className="App">
